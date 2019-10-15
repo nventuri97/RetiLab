@@ -43,11 +43,13 @@ public class Paziente extends Thread {
                 e.printStackTrace();
             }
 
-            for (Boolean m : medici.equipe)
-                m = true;
+            medici.setRedMed();
 
             try {
                 this.visita(i, v_time);
+                medici.unsetRedMed();
+                medici.red.notifyAll();
+                medici.visita.unlock();
                 Thread.sleep(wait_time);
             } catch (InterruptedException e) {
                 e.printStackTrace();

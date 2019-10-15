@@ -1,4 +1,3 @@
-
 package com.company;
 
 import java.util.ArrayList;
@@ -24,5 +23,15 @@ public class MedEquipe {
         //Aggiungo i medici alla lista settandoli a false
         for(int i=0;i<10;i++)
             this.equipe.add(false);
+    }
+
+    public void setRedMed(){
+        for(Boolean m: equipe)
+            m=true;
+    }
+
+    public void unsetRedMed(){
+        for(Boolean m: equipe)
+            m=false;
     }
 }
