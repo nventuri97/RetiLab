@@ -59,12 +59,56 @@ public class Paziente extends Thread {
 
     //Metodo per la gestione dei codici gialli
     public void yellowcode(int cod, String color, MedEquipe medici, int ind){
+        for(int i=0;i<k;i++){
+            long v_time = (long) (Math.random() * 100) + 1;
+            long wait_time = (long) (Math.random() * 100) + 1;
+            medici.visita.lock();
 
+            try {
+                while(medici.equipe.get(ind)==true)
+                    medici.yellow.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            medici.equipe.set(ind, true);
+            try {
+                this.visita(i, v_time);
+                medici.equipe.set(ind, false);
+                medici.yellow.notifyAll();
+                medici.visita.unlock();
+                Thread.sleep(wait_time);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     //Metodo per la gestione dei codici bianchi
     public void whitecode(int cod, String color, MedEquipe medici){
+        for(int i=0;i<k;i++){
+            long v_time = (long) (Math.random() * 100) + 1;
+            long wait_time = (long) (Math.random() * 100) + 1;
+            medici.visita.lock();
 
+            try {
+                while(true)
+                    medici.white.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            int ind=medici.setWhiteMed();
+            try {
+                this.visita(i, v_time);
+                medici.equipe.set(ind, false);
+                medici.white.notifyAll();
+                medici.visita.unlock();
+                Thread.sleep(wait_time);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     //Metodo per la simulazione di una visita

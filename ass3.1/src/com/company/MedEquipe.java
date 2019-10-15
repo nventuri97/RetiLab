@@ -34,4 +34,15 @@ public class MedEquipe {
         for(Boolean m: equipe)
             m=false;
     }
+
+    public int setWhiteMed(){
+        int i;
+        for(i=0;i<10;i++) {
+            if (equipe.get(i) == false) {
+                equipe.set(i, true);
+                break;
+            }
+        }
+        return i;
+    }
 }
