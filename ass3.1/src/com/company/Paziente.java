@@ -31,13 +31,17 @@ public class Paziente extends Thread {
 
     //Metodo per la gestione dei codici rossi
     public void redcode(int cod, String color, MedEquipe medici){
+        //DEVO FARE K VISITE
         for(int i=0; i<this.k; i++) {
             long v_time = (long) (Math.random() * 100) + 1;
             long wait_time = (long) (Math.random() * 100) + 1;
+
+            //entro in mutua esclusione per poter lavorare sui medici
             medici.visita.lock();
 
             try {
-                while (medici.visita.hasWaiters(medici.red))
+                //se qualcuno è già in coda o i medici sono occupati mi fermo
+                while (medici.visita.hasWaiters(medici.red) || medici.medCounter!=0)
                     medici.red.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -72,9 +76,12 @@ public class Paziente extends Thread {
             }
 
             medici.equipe.set(ind, true);
+            medici.medCounter+=1;
             try {
                 this.visita(i, v_time);
                 medici.equipe.set(ind, false);
+                medici.medCounter-=1;
+                medici.red.signalAll();
                 medici.yellow.signalAll();
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
@@ -92,7 +99,7 @@ public class Paziente extends Thread {
             medici.visita.lock();
 
             try {
-                while(medici.visita.hasWaiters(medici.red) || medici.visita.hasWaiters(medici.yellow) || medici.visita.hasWaiters(medici.white))
+                while(medici.visita.hasWaiters(medici.red) || medici.visita.hasWaiters(medici.yellow) || medici.visita.hasWaiters(medici.white) || medici.medCounter==10)
                     medici.white.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -102,6 +109,9 @@ public class Paziente extends Thread {
             try {
                 this.visita(i, v_time);
                 medici.equipe.set(ind, false);
+                medici.medCounter-=1;
+                medici.red.signalAll();
+                medici.yellow.signalAll();
                 medici.white.signalAll();
                 medici.visita.unlock();
                 Thread.sleep(wait_time);

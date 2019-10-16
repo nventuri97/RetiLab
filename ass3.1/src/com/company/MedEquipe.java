@@ -9,11 +9,13 @@ public class MedEquipe {
     final Condition white;
     final Condition yellow;
     final Condition red;
+    protected int medCounter;
     ArrayList<Boolean> equipe=new ArrayList(10);
     ReentrantLock visita;
 
-    public MedEquipe(){ ;
+    public MedEquipe(){
         this.visita=new ReentrantLock();
+        this.medCounter=0;
 
         //Inizializzo le tre variabili di condizione
         this.white=this.visita.newCondition();
@@ -28,11 +30,13 @@ public class MedEquipe {
     public void setRedMed(){
         for(Boolean m: equipe)
             m=true;
+        this.medCounter=10;
     }
 
     public void unsetRedMed(){
         for(Boolean m: equipe)
             m=false;
+        this.medCounter=0;
     }
 
     public int setWhiteMed(){
@@ -43,6 +47,7 @@ public class MedEquipe {
                 break;
             }
         }
+        this.medCounter+=1;
         return i;
     }
 }
