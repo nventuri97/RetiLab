@@ -85,8 +85,10 @@ public class Paziente extends Thread {
                 this.visita(i, v_time);
                 medici.equipe.set(ind, false);
                 medici.medCounter-=1;
-                medici.red.signalAll();
-                medici.yellow.signalAll();
+                if(medici.visita.hasWaiters(medici.red))
+                    medici.red.signalAll();
+                else
+                    medici.yellow.signalAll();
                 //rilascio la mutua esclusione dopo aver svegliato i possibili thread che si sono messi in attesa
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
@@ -118,9 +120,12 @@ public class Paziente extends Thread {
                 this.visita(i, v_time);
                 medici.equipe.set(ind, false);
                 medici.medCounter-=1;
-                medici.red.signalAll();
-                medici.yellow.signalAll();
-                medici.white.signalAll();
+                if(medici.visita.hasWaiters(medici.red))
+                    medici.red.signalAll();
+                else if(medici.visita.hasWaiters(medici.yellow))
+                    medici.yellow.signalAll();
+                else
+                    medici.white.signalAll();
                 //rilascio la mutua esclusione dopo aver svegliato i possibili thread che si sono messi in attesa
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
@@ -132,8 +137,10 @@ public class Paziente extends Thread {
 
     //Metodo per la simulazione di una visita
     private void visita(int i, long v_time) throws InterruptedException{
-        System.out.print("Paziente "+cod+" entra in codice "+color+" per la visita "+i+"\n");
+        System.out.print("Paziente "+cod+" entra in codice "+color+" per la visita "+(i+1)+"\n");
+        System.out.flush();
         Thread.sleep(v_time);
-        System.out.print("Paziente "+cod+" esce dalla visita "+i+"\n");
+        System.out.print("Paziente "+cod+" esce dalla visita "+(i+1)+"\n----------------\n");
+        System.out.flush();
     }
 }

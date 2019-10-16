@@ -27,19 +27,19 @@ public class MedEquipe {
             this.equipe.add(false);
     }
 
-    private void setRedMed(){
+    public void setRedMed(){
         for(Boolean m: equipe)
             m=true;
         this.medCounter=10;
     }
 
-    private void unsetRedMed(){
+    public void unsetRedMed(){
         for(Boolean m: equipe)
             m=false;
         this.medCounter=0;
     }
 
-    private int setWhiteMed(){
+    public int setWhiteMed(){
         int i;
         for(i=0;i<10;i++) {
             if (equipe.get(i) == false) {
