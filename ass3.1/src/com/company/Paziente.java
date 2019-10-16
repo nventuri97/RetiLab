@@ -51,7 +51,7 @@ public class Paziente extends Thread {
                 medici.red.notifyAll();
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -78,7 +78,7 @@ public class Paziente extends Thread {
                 medici.yellow.notifyAll();
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -105,7 +105,7 @@ public class Paziente extends Thread {
                 medici.white.notifyAll();
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
