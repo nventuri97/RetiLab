@@ -48,7 +48,7 @@ public class Paziente extends Thread {
             try {
                 this.visita(i, v_time);
                 medici.unsetRedMed();
-                medici.red.notifyAll();
+                medici.red.signalAll();
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
             } catch (Exception e) {
@@ -75,7 +75,7 @@ public class Paziente extends Thread {
             try {
                 this.visita(i, v_time);
                 medici.equipe.set(ind, false);
-                medici.yellow.notifyAll();
+                medici.yellow.signalAll();
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
             } catch (Exception e) {
@@ -102,7 +102,7 @@ public class Paziente extends Thread {
             try {
                 this.visita(i, v_time);
                 medici.equipe.set(ind, false);
-                medici.white.notifyAll();
+                medici.white.signalAll();
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
             } catch (Exception e) {

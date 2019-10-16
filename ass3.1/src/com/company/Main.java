@@ -44,13 +44,13 @@ public class Main {
             p.start();
         }
 
-        /*try {
+        try {
             //Aspetto che tutti i pazienti siano terminati per poter fare la stampa
             for (Paziente p : attesa)
                 p.join();
         }catch (InterruptedException e){
             e.printStackTrace();
         }
-        System.out.print("Non ci sono più pazienti nel reparto");*/
+        System.out.print("Non ci sono più pazienti nel reparto\n");
     }
 }
