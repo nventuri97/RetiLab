@@ -52,7 +52,12 @@ public class Paziente extends Thread {
             try {
                 this.visita(i, v_time);
                 medici.unsetRedMed();
-                medici.red.signalAll();
+                if(medici.visita.hasWaiters(medici.red))
+                    medici.red.signalAll();
+                else if(medici.visita.hasWaiters(medici.yellow))
+                    medici.yellow.signalAll();
+                else
+                    medici.white.signalAll();
                 //rilascio la mutua esclusione dopo aver svegliato i possibili thread che si sono messi in attesa
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
@@ -87,8 +92,10 @@ public class Paziente extends Thread {
                 medici.medCounter-=1;
                 if(medici.visita.hasWaiters(medici.red))
                     medici.red.signalAll();
-                else
+                else if(medici.visita.hasWaiters(medici.yellow))
                     medici.yellow.signalAll();
+                else
+                    medici.white.signalAll();
                 //rilascio la mutua esclusione dopo aver svegliato i possibili thread che si sono messi in attesa
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
