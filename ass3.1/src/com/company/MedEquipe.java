@@ -9,7 +9,7 @@ public class MedEquipe {
     final Condition white;
     final Condition yellow;
     final Condition red;
-    protected int medCounter;
+    public int medCounter;
     ArrayList<Boolean> equipe=new ArrayList(10);
     ReentrantLock visita;
 
@@ -27,19 +27,19 @@ public class MedEquipe {
             this.equipe.add(false);
     }
 
-    public void setRedMed(){
+    private void setRedMed(){
         for(Boolean m: equipe)
             m=true;
         this.medCounter=10;
     }
 
-    public void unsetRedMed(){
+    private void unsetRedMed(){
         for(Boolean m: equipe)
             m=false;
         this.medCounter=0;
     }
 
-    public int setWhiteMed(){
+    private int setWhiteMed(){
         int i;
         for(i=0;i<10;i++) {
             if (equipe.get(i) == false) {

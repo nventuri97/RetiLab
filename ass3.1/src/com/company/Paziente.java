@@ -30,7 +30,7 @@ public class Paziente extends Thread {
     }
 
     //Metodo per la gestione dei codici rossi
-    public void redcode(int cod, String color, MedEquipe medici){
+    private void redcode(int cod, String color, MedEquipe medici){
         //DEVO FARE K VISITE
         for(int i=0; i<this.k; i++) {
             long v_time = (long) (Math.random() * 100) + 1;
@@ -53,6 +53,7 @@ public class Paziente extends Thread {
                 this.visita(i, v_time);
                 medici.unsetRedMed();
                 medici.red.signalAll();
+                //rilascio la mutua esclusione dopo aver svegliato i possibili thread che si sono messi in attesa
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
             } catch (Exception e) {
@@ -62,14 +63,17 @@ public class Paziente extends Thread {
     }
 
     //Metodo per la gestione dei codici gialli
-    public void yellowcode(int cod, String color, MedEquipe medici, int ind){
+    private void yellowcode(int cod, String color, MedEquipe medici, int ind){
+        //DEVO FARE K VISITE
         for(int i=0;i<k;i++){
             long v_time = (long) (Math.random() * 100) + 1;
             long wait_time = (long) (Math.random() * 100) + 1;
+
+            //entro in mutua esclusione per poter lavorare sui medici
             medici.visita.lock();
 
             try {
-                while(medici.equipe.get(ind)==true || medici.visita.hasWaiters(medici.red) || medici.visita.hasWaiters(medici.yellow))
+                while(medici.equipe.get(ind) || medici.visita.hasWaiters(medici.red) || medici.visita.hasWaiters(medici.yellow))
                     medici.yellow.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -83,6 +87,7 @@ public class Paziente extends Thread {
                 medici.medCounter-=1;
                 medici.red.signalAll();
                 medici.yellow.signalAll();
+                //rilascio la mutua esclusione dopo aver svegliato i possibili thread che si sono messi in attesa
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
             } catch (Exception e) {
@@ -92,10 +97,13 @@ public class Paziente extends Thread {
     }
 
     //Metodo per la gestione dei codici bianchi
-    public void whitecode(int cod, String color, MedEquipe medici){
+    private void whitecode(int cod, String color, MedEquipe medici){
+        //DEVO FARE K VISITE
         for(int i=0;i<k;i++){
             long v_time = (long) (Math.random() * 100) + 1;
             long wait_time = (long) (Math.random() * 100) + 1;
+
+            //entro in mutua esclusione per poter lavorare sui medici
             medici.visita.lock();
 
             try {
@@ -113,6 +121,7 @@ public class Paziente extends Thread {
                 medici.red.signalAll();
                 medici.yellow.signalAll();
                 medici.white.signalAll();
+                //rilascio la mutua esclusione dopo aver svegliato i possibili thread che si sono messi in attesa
                 medici.visita.unlock();
                 Thread.sleep(wait_time);
             } catch (Exception e) {
@@ -122,7 +131,7 @@ public class Paziente extends Thread {
     }
 
     //Metodo per la simulazione di una visita
-    public void visita(int i, long v_time) throws InterruptedException{
+    private void visita(int i, long v_time) throws InterruptedException{
         System.out.print("Paziente "+cod+" entra in codice "+color+" per la visita "+i+"\n");
         Thread.sleep(v_time);
         System.out.print("Paziente "+cod+" esce dalla visita "+i+"\n");
