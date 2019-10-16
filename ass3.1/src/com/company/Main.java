@@ -1,6 +1,8 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.*;
 
 public class Main {
@@ -43,14 +45,5 @@ public class Main {
         for(Paziente p: attesa) {
             p.start();
         }
-
-        try {
-            //Aspetto che tutti i pazienti siano terminati per poter fare la stampa
-            for (Paziente p : attesa)
-                p.join();
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
-        System.out.print("Non ci sono più pazienti nel reparto\n");
     }
 }
