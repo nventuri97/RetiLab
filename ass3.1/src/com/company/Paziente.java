@@ -37,7 +37,7 @@ public class Paziente extends Thread {
             medici.visita.lock();
 
             try {
-                while (true)
+                while (medici.visita.hasWaiters(medici.red))
                     medici.red.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -65,7 +65,7 @@ public class Paziente extends Thread {
             medici.visita.lock();
 
             try {
-                while(medici.equipe.get(ind)==true)
+                while(medici.equipe.get(ind)==true || medici.visita.hasWaiters(medici.red) || medici.visita.hasWaiters(medici.yellow))
                     medici.yellow.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -92,7 +92,7 @@ public class Paziente extends Thread {
             medici.visita.lock();
 
             try {
-                while(true)
+                while(medici.visita.hasWaiters(medici.red) || medici.visita.hasWaiters(medici.yellow) || medici.visita.hasWaiters(medici.white))
                     medici.white.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -113,8 +113,8 @@ public class Paziente extends Thread {
 
     //Metodo per la simulazione di una visita
     public void visita(int i, long v_time) throws InterruptedException{
-        System.out.print("Paziente "+cod+" entra in codice "+color+" per la visita "+i);
+        System.out.print("Paziente "+cod+" entra in codice "+color+" per la visita "+i+"\n");
         Thread.sleep(v_time);
-        System.out.print("Paziente "+cod+" esce dalla visita "+i);
+        System.out.print("Paziente "+cod+" esce dalla visita "+i+"\n");
     }
 }
