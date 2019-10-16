@@ -4,7 +4,6 @@
     <list default="true" id="f3a56a48-2414-40c8-87d4-ff769341b8cc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ass3.1/com/company/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ass3.1/com/company/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ass3.1/com/company/Paziente.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ass3.1/com/company/Paziente.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/company/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Main.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -38,7 +37,7 @@
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.company.Main" />
       <module name="ass3.1" />
-      <option name="PROGRAM_PARAMETERS" value="3 5 2" />
+      <option name="PROGRAM_PARAMETERS" value="23 20 15" />
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Run" />
       <method v="2">
