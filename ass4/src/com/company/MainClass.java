@@ -1,5 +1,6 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class MainClass {
@@ -14,11 +15,14 @@ public class MainClass {
         //Genero casualmente un numero di consumatori tra 1 e 10
         int k=(int) (Math.random()*9)+1;
 
-        Producer produttore= new Producer;
+        Producer produttore= new Producer();
         Thread p=new Thread(produttore);
+        p.start();
 
         for(int i=0;i<k;i++){
-            
+            Consumer consumatore=new Consumer();
+            Thread c= new Thread(consumatore);
+            c.start();
         }
     }
 }
