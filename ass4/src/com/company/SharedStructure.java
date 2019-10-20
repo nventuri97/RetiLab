@@ -16,12 +16,9 @@ public class SharedStructure {
     }
 
     public void put(String s) throws InterruptedException{
+        //Lavoro in mutua esclusione ma non ho bisogno di condition variables visto che ho un solo produttore
         block.lock();
-        while(block.hasWaiters(access))
-            access.wait();
-
         list.add(s);
-        access.signalAll();
         block.unlock();
     }
 
@@ -31,7 +28,7 @@ public class SharedStructure {
         while(block.hasWaiters(access))
             access.wait();
 
-        path=list.get(index);
+        path=list.poll();
         return path;
     }
 }
