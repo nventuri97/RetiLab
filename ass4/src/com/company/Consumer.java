@@ -12,8 +12,7 @@ public class Consumer implements Runnable {
     public void run(){
         while(!sh.emptyQueue()) {
             try {
-                String path = sh.get();
-                File dir = new File(path);
+                File dir = sh.get();
                 if (dir.isDirectory()) {
                     File[] files = dir.listFiles();
                     for (File file : files) {

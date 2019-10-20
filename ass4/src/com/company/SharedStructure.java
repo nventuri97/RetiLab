@@ -1,11 +1,12 @@
 package com.company;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class SharedStructure {
-    private LinkedList<String> list;
+    private LinkedList<File> list;
     private ReentrantLock block;
     private Condition access;
 
@@ -15,15 +16,15 @@ public class SharedStructure {
         this.access=this.block.newCondition();
     }
 
-    public void put(String s) throws InterruptedException{
+    public void put(File s) throws InterruptedException{
         //Lavoro in mutua esclusione ma non ho bisogno di condition variables visto che ho un solo produttore
         block.lock();
         list.add(s);
         block.unlock();
     }
 
-    public String get() throws InterruptedException{
-        String path;
+    public File get() throws InterruptedException{
+        File path;
         block.lock();
         while(block.hasWaiters(access) || list.isEmpty())
             access.wait();

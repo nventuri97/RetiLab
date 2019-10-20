@@ -12,16 +12,16 @@ public class Producer implements Runnable {
     }
 
     public void run(){
-        recursiveVisit(main_dir);
+        File dir=new File(main_dir);
+        recursiveVisit(dir);
     }
 
-    public void recursiveVisit(String d){
-        File dir=new File(d);
+    public void recursiveVisit(File dir){
         if(dir.isDirectory()){
             try {
-                sh.put(d);
-                String[] list=dir.list();
-                for(String file: list){
+                sh.put(dir);
+                File[] list=dir.listFiles();
+                for(File file: list){
                     recursiveVisit(file);
                 }
             } catch(InterruptedException e){
