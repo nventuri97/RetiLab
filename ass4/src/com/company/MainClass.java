@@ -19,6 +19,11 @@ public class MainClass {
         Producer produttore= new Producer(main_path, shared);
         Thread p=new Thread(produttore);
         p.start();
+        try{
+            p.join();
+        } catch(InterruptedException e){
+            e.printStackTrace();
+        }
 
         for(int i=0;i<k;i++){
             Consumer consumatore=new Consumer(shared);
