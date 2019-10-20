@@ -22,10 +22,10 @@ public class SharedStructure {
         block.unlock();
     }
 
-    public String get(int index) throws InterruptedException{
+    public String get() throws InterruptedException{
         String path;
         block.lock();
-        while(block.hasWaiters(access))
+        while(block.hasWaiters(access) || list.isEmpty())
             access.wait();
 
         path=list.poll();
