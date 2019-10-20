@@ -10,17 +10,22 @@ public class Consumer implements Runnable {
     }
 
     public void run(){
-        try {
-            String path = sh.get();
-            File dir=new File(path);
-            if(dir.isDirectory()){
-                String[] files=dir.list();
-                for(String file: files){
-                    System.out.println(file);
+        while(!sh.emptyQueue()) {
+            try {
+                String path = sh.get();
+                File dir = new File(path);
+                if (dir.isDirectory()) {
+                    File[] files = dir.listFiles();
+                    for (File file : files) {
+                        if(file.isDirectory())
+                            System.out.print("Directory: "+file+"\n");
+                        else if(file.isFile())
+                            System.out.print("File: "+file+"\n");
+                    }
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch(InterruptedException e){
-            e.printStackTrace();
         }
     }
 }

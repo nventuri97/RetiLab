@@ -31,4 +31,8 @@ public class SharedStructure {
         path=list.poll();
         return path;
     }
+
+    public boolean emptyQueue(){
+        return list.isEmpty();
+    }
 }
