@@ -1,5 +1,3 @@
-package com.company;
-
 import java.io.File;
 
 public class Producer implements Runnable {
