@@ -20,6 +20,7 @@ public class SharedStructure {
         //Lavoro in mutua esclusione ma non ho bisogno di condition variables visto che ho un solo produttore
         block.lock();
         list.add(s);
+        access.signalAll();
         block.unlock();
     }
 
@@ -27,9 +28,11 @@ public class SharedStructure {
         File path;
         block.lock();
         while(block.hasWaiters(access) || list.isEmpty())
-            access.wait();
+            access.await();
 
         path=list.poll();
+        access.signalAll();
+        block.unlock();
         return path;
     }
 

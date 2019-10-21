@@ -16,14 +16,15 @@ public class Consumer implements Runnable {
                 if (dir.isDirectory()) {
                     File[] files = dir.listFiles();
                     for (File file : files) {
-                        if(file.isDirectory()) {
-                            System.out.print("Directory: " + file + "\n");
-                            System.out.flush();
-                        }
-                        else if(file.isFile()) {
-                            System.out.print("File: " + file + "\n");
-                            System.out.flush();
-                        }
+                        if(file!=null)
+                            if(file.isDirectory()) {
+                                System.out.print("Directory: " + file + "\n");
+                                System.out.flush();
+                            }
+                            else if(file.isFile()) {
+                                System.out.print("File: " + file + "\n");
+                                System.out.flush();
+                            }
                     }
                 }
             } catch (InterruptedException e) {

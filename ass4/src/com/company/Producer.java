@@ -22,7 +22,8 @@ public class Producer implements Runnable {
                 sh.put(dir);
                 File[] list=dir.listFiles();
                 for(File file: list){
-                    recursiveVisit(file);
+                    if(file!=null)
+                        recursiveVisit(file);
                 }
             } catch(InterruptedException e){
                 e.printStackTrace();
