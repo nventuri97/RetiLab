@@ -40,7 +40,11 @@ public class SharedStructure {
         return list.isEmpty();
     }
 
-    public void setFinish(){finish=true;}
+    public void setFinish(){
+        this.finish=true;
+    }
 
-    public boolean isFinish(){return finish;}
+    public boolean isFinish(){
+        return finish;
+    }
 }
