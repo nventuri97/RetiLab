@@ -8,22 +8,23 @@ public class Consumer implements Runnable {
     }
 
     public void run(){
-        while(!sh.emptyQueue()) {
+        while(!sh.emptyQueue() || sh.isFinish()) {
             try {
                 File dir = sh.get();
                 if (dir.isDirectory()) {
                     File[] files = dir.listFiles();
-                    for (File file : files) {
-                        if(file!=null)
-                            if(file.isDirectory()) {
-                                System.out.print("Directory: " + file + "\n");
-                                System.out.flush();
-                            }
-                            else if(file.isFile()) {
-                                System.out.print("File: " + file + "\n");
-                                System.out.flush();
-                            }
-                    }
+                    if(files!=null)
+                        for (File file : files) {
+                            if(file!=null)
+                                if(file.isDirectory()) {
+                                    System.out.print("Directory: " + file + "\n");
+                                    System.out.flush();
+                                }
+                                else if(file.isFile()) {
+                                    System.out.print("File: " + file + "\n");
+                                    System.out.flush();
+                                }
+                        }
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();

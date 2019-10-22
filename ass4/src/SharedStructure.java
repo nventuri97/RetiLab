@@ -7,11 +7,13 @@ public class SharedStructure {
     private LinkedList<File> list;
     private ReentrantLock block;
     private Condition access;
+    private boolean finish;
 
     public SharedStructure(){
         this.list=new LinkedList<>();
         this.block=new ReentrantLock();
         this.access=this.block.newCondition();
+        this.finish=false;
     }
 
     public void put(File s) throws InterruptedException{
@@ -37,4 +39,8 @@ public class SharedStructure {
     public boolean emptyQueue(){
         return list.isEmpty();
     }
+
+    public void setFinish(){finish=true;}
+
+    public boolean isFinish(){return finish;}
 }

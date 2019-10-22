@@ -12,6 +12,7 @@ public class Producer implements Runnable {
     public void run(){
         File dir=new File(main_dir);
         recursiveVisit(dir);
+        this.sh.setFinish();
     }
 
     public void recursiveVisit(File dir){
@@ -19,10 +20,11 @@ public class Producer implements Runnable {
             try {
                 sh.put(dir);
                 File[] list=dir.listFiles();
-                for(File file: list){
-                    if(file!=null)
-                        recursiveVisit(file);
-                }
+                if(list!=null)
+                    for(File file: list){
+                        if(file!=null)
+                            recursiveVisit(file);
+                    }
             } catch(InterruptedException e){
                 e.printStackTrace();
             }
