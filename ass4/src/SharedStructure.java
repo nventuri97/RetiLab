@@ -19,14 +19,18 @@ public class SharedStructure {
     public void put(File s) throws InterruptedException{
         //Lavoro in mutua esclusione ma non ho bisogno di condition variables visto che ho un solo produttore
         block.lock();
+
         list.add(s);
-        access.signalAll();
+
+        if(block.hasWaiters(access))
+            access.signalAll();
         block.unlock();
     }
 
     public File get() throws InterruptedException{
         File path;
         block.lock();
+
         while(block.hasWaiters(access) || list.isEmpty())
             access.await();
 
