@@ -31,7 +31,7 @@ public class SharedStructure {
         String path;
         block.lock();
 
-        while(list.isEmpty())
+        while(block.hasWaiters(access ) || list.isEmpty())
             access.await();
 
         path=list.poll();
@@ -41,14 +41,28 @@ public class SharedStructure {
     }
 
     public boolean emptyQueue(){
-        return list.isEmpty();
+        try{
+            block.lock();
+            return list.isEmpty();
+        } finally {
+            block.unlock();
+        }
+
     }
 
     public void setFinish(){
+        block.lock();
         this.finish=true;
+        block.unlock();
     }
 
     public boolean isFinish(){
-        return finish;
+        try{
+            block.lock();
+            return finish;
+        } finally {
+            block.unlock();
+        }
+
     }
 }
