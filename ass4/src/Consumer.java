@@ -9,7 +9,7 @@ public class Consumer implements Runnable {
     }
 
     public void run(){
-        while(!sh.emptyQueue() || sh.isFinish()) {
+        while(!sh.emptyQueue() && sh.isFinish()) {
             try {
                 String path = sh.get();
                 if(path!=null) {

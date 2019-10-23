@@ -31,7 +31,7 @@ public class SharedStructure {
         String path;
         block.lock();
 
-        while(block.hasWaiters(access) || list.isEmpty())
+        while(list.isEmpty())
             access.await();
 
         path=list.poll();
