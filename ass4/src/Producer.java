@@ -19,10 +19,13 @@ public class Producer implements Runnable {
     public void recursiveVisit(File dir){
         if(dir.isDirectory()){
             try {
+                //insirisco il path all'interno della lista
+                //uso getCanonicalPath per evitare problemi con le cartelle . e ..
                 sh.put(dir.getCanonicalPath());
                 File[] list=dir.listFiles();
                 if(list!=null)
                     for(File file: list){
+                        //se il file non è null chiamo la funzione ricorsiva sul file per guardarne il contenuto
                         if(file!=null)
                             recursiveVisit(file);
                     }

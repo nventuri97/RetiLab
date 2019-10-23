@@ -21,7 +21,7 @@ public class SharedStructure {
         block.lock();
 
         list.add(s);
-
+        //nel caso ci fossero consumatori in attesa li sveglio avendo inserito nella lista
         if(block.hasWaiters(access))
             access.signalAll();
         block.unlock();
@@ -31,10 +31,13 @@ public class SharedStructure {
         String path;
         block.lock();
 
+        //se ci sono altri consumatori sospesi o la lista è vuota allora mi sospsendo
         while(block.hasWaiters(access ) || list.isEmpty())
             access.await();
 
+        //prendo il primo elemento della lista
         path=list.poll();
+        //sveglio i consumatori sospesi
         access.signalAll();
         block.unlock();
         return path;
