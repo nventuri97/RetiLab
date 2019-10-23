@@ -4,7 +4,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class SharedStructure {
-    private LinkedList<File> list;
+    private LinkedList<String> list;
     private ReentrantLock block;
     private Condition access;
     private boolean finish;
@@ -16,7 +16,7 @@ public class SharedStructure {
         this.finish=false;
     }
 
-    public void put(File s) throws InterruptedException{
+    public void put(String s) throws InterruptedException{
         //Lavoro in mutua esclusione ma non ho bisogno di condition variables visto che ho un solo produttore
         block.lock();
 
@@ -27,8 +27,8 @@ public class SharedStructure {
         block.unlock();
     }
 
-    public File get() throws InterruptedException{
-        File path;
+    public String get() throws InterruptedException{
+        String path;
         block.lock();
 
         while(block.hasWaiters(access) || list.isEmpty())

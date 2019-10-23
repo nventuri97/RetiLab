@@ -27,11 +27,11 @@ public class MainClass {
             Consumer consumatore=new Consumer(shared);
             Thread c= new Thread(consumatore);
             c.start();
-            /*try {
+            try {
                 c.join();
             }catch(InterruptedException e){
                 e.printStackTrace();
-            }*/
+            }
         }
     }
 }

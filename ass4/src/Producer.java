@@ -19,7 +19,7 @@ public class Producer implements Runnable {
     public void recursiveVisit(File dir){
         if(dir.isDirectory()){
             try {
-                sh.put(dir);
+                sh.put(dir.getCanonicalPath());
                 File[] list=dir.listFiles();
                 if(list!=null)
                     for(File file: list){
@@ -27,6 +27,8 @@ public class Producer implements Runnable {
                             recursiveVisit(file);
                     }
             } catch(InterruptedException e){
+                e.printStackTrace();
+            } catch (IOException e){
                 e.printStackTrace();
             }
         }
