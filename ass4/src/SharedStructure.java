@@ -41,13 +41,7 @@ public class SharedStructure {
     }
 
     public boolean emptyQueue(){
-        try{
-            block.lock();
-            return list.isEmpty();
-        } finally {
-            block.unlock();
-        }
-
+        return list.isEmpty();
     }
 
     public void setFinish(){
@@ -57,12 +51,6 @@ public class SharedStructure {
     }
 
     public boolean isFinish(){
-        try{
-            block.lock();
-            return finish;
-        } finally {
-            block.unlock();
-        }
-
+        return finish;
     }
 }
