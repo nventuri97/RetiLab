@@ -5,13 +5,17 @@ public class SharedVariables {
     //variabili condivise che andrò a modificare in mutua esclusione
     private int bonifico, accredito, bollettino, f24, pagobancomat;
 
-    //Lock e variabile condivisa
+    //Lock e variabili di condizione per ogni variabile condivisa
     private ReentrantLock lock;
-    private Condition access;
+    final Condition bon, acc, boll, f, pag;
 
     public SharedVariables(){
         this.lock=new ReentrantLock();
-        this.access=lock.newCondition();
+        this.bon=lock.newCondition();
+        this.acc=lock.newCondition();
+        this.boll=lock.newCondition();
+        this.f=lock.newCondition();
+        this.pag=lock.newCondition();
 
         this.bonifico=this.accredito=this.bollettino=this.f24=this.pagobancomat=0;
     }
@@ -19,55 +23,55 @@ public class SharedVariables {
     private void addBonifico() throws InterruptedException{
         lock.lock();
 
-        while(lock.isLocked() || lock.hasWaiters(access))
-            access.await();
+        while(lock.isLocked() || lock.hasWaiters(bon))
+            bon.await();
 
         bonifico++;
-        access.signalAll();
+        bon.signalAll();
         lock.unlock();
     }
 
     private void addAccredito() throws InterruptedException{
         lock.lock();
 
-        while(lock.isLocked() || lock.hasWaiters(access))
-            access.await();
+        while(lock.isLocked() || lock.hasWaiters(acc))
+            acc.await();
 
         accredito++;
-        access.signalAll();
+        acc.signalAll();
         lock.unlock();
     }
 
     private void addBollettino() throws InterruptedException{
         lock.lock();
 
-        while(lock.isLocked() || lock.hasWaiters(access))
-            access.await();
+        while(lock.isLocked() || lock.hasWaiters(boll))
+            boll.await();
 
         bollettino++;
-        access.signalAll();
+        boll.signalAll();
         lock.unlock();
     }
 
     private void addF24() throws InterruptedException{
         lock.lock();
 
-        while(lock.isLocked() || lock.hasWaiters(access))
-            access.await();
+        while(lock.isLocked() || lock.hasWaiters(f))
+            f.await();
 
         f24++;
-        access.signalAll();
+        f.signalAll();
         lock.unlock();
     }
 
     private void addPagoBancomat() throws InterruptedException{
         lock.lock();
 
-        while(lock.isLocked() || lock.hasWaiters(access))
-            access.await();
+        while(lock.isLocked() || lock.hasWaiters(pag))
+            pag.await();
 
         pagobancomat++;
-        access.signalAll();
+        pag.signalAll();
         lock.unlock();
     }
 }
