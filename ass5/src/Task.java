@@ -13,7 +13,8 @@ public class Task implements Runnable {
     public void run() {
         JSONArray movements=(JSONArray) account.get("Movements");
         while(!movements.isEmpty()){
-            JSONObject casual=movements.remove("Casual");
+            JSONObject str=(JSONObject) movements.remove(0);
+            String casual=(String) str.get("Casual");
             try {
                 switch (casual) {
                     case "Bonifico":

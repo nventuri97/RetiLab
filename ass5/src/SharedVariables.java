@@ -112,4 +112,12 @@ public class SharedVariables {
         pag.signalAll();
         block.unlock();
     }
+
+    public void printer(){
+        System.out.print("Bonifici "+this.bonifico+"\n");
+        System.out.print("Accrediti "+this.accredito+"\n");
+        System.out.print("Bollettini "+this.bollettino+"\n");
+        System.out.print("F24 "+this.f24+"\n");
+        System.out.print("PagoBancomat "+this.pagobancomat+"\n");
+    }
 }

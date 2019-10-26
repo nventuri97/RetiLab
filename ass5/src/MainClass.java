@@ -15,5 +15,14 @@ public class MainClass {
         ReaderThread reader=new ReaderThread(path, list);
         reader.run();
 
+        while (reader.isAlive() || !list.emptyArray()){
+            Task task=new Task(list.get(), list);
+
+            pool.executeTask(task);
+        }
+
+        pool.atClose();
+        list.printer();
+
     }
 }
