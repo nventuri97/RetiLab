@@ -9,7 +9,7 @@ public class MainClass {
         //Creo il pool di thread
         Controller pool=new Controller();
         //path del file json
-        String path="Accounts.json";
+        String path="Account.json";
 
         //Creo istanza del file lettore e lo eseguo
         ReaderThread reader=new ReaderThread(path, list);
