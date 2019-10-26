@@ -9,80 +9,107 @@ public class SharedVariables {
     private int bonifico, accredito, bollettino, f24, pagobancomat;
 
     //Lock e variabili di condizione per ogni variabile condivisa
-    private ReentrantLock lock;
-    final Condition bon, acc, boll, f, pag;
+    private ReentrantLock block;
+    final Condition bon, acc, boll, f, pag, c_data;
     private JSONArray data;
 
     public SharedVariables(){
-        this.lock=new ReentrantLock();
+        //Inizializzo la lock per gestire la mutua esclusione
+        this.block=new ReentrantLock();
+        //JSONArray in cui saranno salvati i singoli conti correnti
         this.data=new JSONArray();
-        this.bon=lock.newCondition();
-        this.acc=lock.newCondition();
-        this.boll=lock.newCondition();
-        this.f=lock.newCondition();
-        this.pag=lock.newCondition();
 
+        //Inizializzo tutte le variabili di condizione che mi servono per gestire i contatori
+        this.c_data=block.newCondition();
+        this.bon=block.newCondition();
+        this.acc=block.newCondition();
+        this.boll=block.newCondition();
+        this.f=block.newCondition();
+        this.pag=block.newCondition();
+        //variabili condivise, contatori numero causali
         this.bonifico=this.accredito=this.bollettino=this.f24=this.pagobancomat=0;
     }
 
     public void put(JSONObject obj){
-        lock.lock();
+        block.lock();
         data.add(obj);
-        lock.unlock();
+        block.unlock();
+    }
+
+    public JSONObject get(){
+        block.lock();
+
+        try {
+            while (data.isEmpty() || block.hasWaiters(c_data))
+                c_data.await();
+
+            return (JSONObject) data.get(0);
+        } catch(InterruptedException e){
+            e.printStackTrace();
+        } finally {
+            c_data.signalAll();
+            block.unlock();
+        }
+
+        return null;
+    }
+
+    public boolean emptyArray(){
+        return data.isEmpty();
     }
 
     public void addBonifico() throws InterruptedException{
-        lock.lock();
+        block.lock();
 
-        while(lock.isLocked() || lock.hasWaiters(bon))
+        while(block.isLocked() || block.hasWaiters(bon))
             bon.await();
 
         bonifico++;
         bon.signalAll();
-        lock.unlock();
+        block.unlock();
     }
 
     public void addAccredito() throws InterruptedException{
-        lock.lock();
+        block.lock();
 
-        while(lock.isLocked() || lock.hasWaiters(acc))
+        while(block.isLocked() || block.hasWaiters(acc))
             acc.await();
 
         accredito++;
         acc.signalAll();
-        lock.unlock();
+        block.unlock();
     }
 
-    private void addBollettino() throws InterruptedException{
-        lock.lock();
+    public void addBollettino() throws InterruptedException{
+        block.lock();
 
-        while(lock.isLocked() || lock.hasWaiters(boll))
+        while(block.isLocked() || block.hasWaiters(boll))
             boll.await();
 
         bollettino++;
         boll.signalAll();
-        lock.unlock();
+        block.unlock();
     }
 
     public void addF24() throws InterruptedException{
-        lock.lock();
+        block.lock();
 
-        while(lock.isLocked() || lock.hasWaiters(f))
+        while(block.isLocked() || block.hasWaiters(f))
             f.await();
 
         f24++;
         f.signalAll();
-        lock.unlock();
+        block.unlock();
     }
 
     public void addPagoBancomat() throws InterruptedException{
-        lock.lock();
+        block.lock();
 
-        while(lock.isLocked() || lock.hasWaiters(pag))
+        while(block.isLocked() || block.hasWaiters(pag))
             pag.await();
 
         pagobancomat++;
         pag.signalAll();
-        lock.unlock();
+        block.unlock();
     }
 }
