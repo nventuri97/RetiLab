@@ -15,26 +15,22 @@ public class Task implements Runnable {
         while(!movements.isEmpty()){
             JSONObject str=(JSONObject) movements.remove(0);
             String casual=(String) str.get("Casual");
-            try {
-                switch (casual) {
-                    case "Bonifico":
-                        sh.addBonifico();
-                        break;
-                    case "Accredito":
-                        sh.addAccredito();
-                        break;
-                    case "Bollettino":
-                        sh.addBollettino();
-                        break;
-                    case "F24":
-                        sh.addF24();
-                        break;
-                    case "PagoBancomat":
-                        sh.addPagoBancomat();
-                        break;
-                }
-            } catch (InterruptedException e){
-                e.printStackTrace();
+            switch (casual) {
+                case "Bonifico":
+                    sh.addCasual(0);
+                    break;
+                case "Accredito":
+                    sh.addCasual(1);
+                    break;
+                case "Bollettino":
+                    sh.addCasual(2);
+                    break;
+                case "F24":
+                    sh.addCasual(3);
+                    break;
+                case "PagoBancomat":
+                    sh.addCasual(4);
+                    break;
             }
         }
     }
