@@ -1,3 +1,6 @@
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -8,9 +11,11 @@ public class SharedVariables {
     //Lock e variabili di condizione per ogni variabile condivisa
     private ReentrantLock lock;
     final Condition bon, acc, boll, f, pag;
+    private JSONArray data;
 
     public SharedVariables(){
         this.lock=new ReentrantLock();
+        this.data=new JSONArray();
         this.bon=lock.newCondition();
         this.acc=lock.newCondition();
         this.boll=lock.newCondition();
@@ -20,7 +25,13 @@ public class SharedVariables {
         this.bonifico=this.accredito=this.bollettino=this.f24=this.pagobancomat=0;
     }
 
-    private void addBonifico() throws InterruptedException{
+    public void put(JSONObject obj){
+        lock.lock();
+        data.add(obj);
+        lock.unlock();
+    }
+
+    public void addBonifico() throws InterruptedException{
         lock.lock();
 
         while(lock.isLocked() || lock.hasWaiters(bon))
@@ -31,7 +42,7 @@ public class SharedVariables {
         lock.unlock();
     }
 
-    private void addAccredito() throws InterruptedException{
+    public void addAccredito() throws InterruptedException{
         lock.lock();
 
         while(lock.isLocked() || lock.hasWaiters(acc))
@@ -53,7 +64,7 @@ public class SharedVariables {
         lock.unlock();
     }
 
-    private void addF24() throws InterruptedException{
+    public void addF24() throws InterruptedException{
         lock.lock();
 
         while(lock.isLocked() || lock.hasWaiters(f))
@@ -64,7 +75,7 @@ public class SharedVariables {
         lock.unlock();
     }
 
-    private void addPagoBancomat() throws InterruptedException{
+    public void addPagoBancomat() throws InterruptedException{
         lock.lock();
 
         while(lock.isLocked() || lock.hasWaiters(pag))
