@@ -16,6 +16,11 @@ public class MainClass {
 
                 DataOutputStream response=new DataOutputStream(active_socket.getOutputStream());
                 response.writeBytes("HTTP/1.0 200 OK\r\n");
+                if(!error)
+                    response.writeBytes("Usage: non-valid request\r\n");
+
+                sendResponse(response);
+                active_socket.close();
             }
         } catch (IOException ioe){
             ioe.printStackTrace();
@@ -35,5 +40,23 @@ public class MainClass {
         String filename=subseq[1].substring(1);
         research=new File(filename);
         return true;
+    }
+
+    private static void sendResponse(DataOutputStream response) throws IOException{
+        InputStream is=null;
+        if(research.exists()) {
+            is = new FileInputStream(research);
+            byte[] data=new byte[(int) research.length()];
+            is.read(data);
+
+            response.writeBytes("Content-Length: " + data.length);
+            response.writeBytes("\r\n\r\n");
+            response.write(data);
+        }else {
+            response.writeBytes("\r\n\r\n");
+            response.writeBytes("Usage: file doesn't exist\r\n\r\n");
+        }
+        if(is!=null)
+            is.close();
     }
 }
