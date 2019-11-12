@@ -38,6 +38,11 @@ public class MainClass {
 
         String[] subseq=source.split("\\s+");
         String filename=subseq[1].substring(1);
+
+        //Controllo che il nome del file abbia o spazi o meno,
+        //se ha %20 nel nome, ha spazi e quindi sostituisco ogni occorrenza di %20 con " "
+        if(filename.contains("%20"))
+            filename=filename.replace("%20", " ");
         research=new File(filename);
         return true;
     }
