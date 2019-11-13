@@ -18,9 +18,11 @@ public class MainClass {
                 boolean error=readRequest(reader);
 
                 DataOutputStream response=new DataOutputStream(active_socket.getOutputStream());
-                response.writeBytes("HTTP/1.0 200 OK\r\n");
-                if(!error)
-                    response.writeBytes("Usage: non-valid request\r\n");
+
+                if(!error) {
+                    response.writeBytes("HTTP/1.0 501 not implemented\r\n");
+                    response.writeBytes("Usage: Non-valid request");
+                }
 
                 //invio la risposta alla richiesta che è stata fatta
                 sendResponse(response);
@@ -54,8 +56,10 @@ public class MainClass {
 
     private static void sendResponse(DataOutputStream response) throws IOException{
         InputStream is=null;
+
         //se il file esiste costruisco la risposta, altrimenti restituisco un messaggio d'errore
         if(research.exists()) {
+            response.writeBytes("HTTP/1.0 200 OK\r\n");
             is = new FileInputStream(research);
             byte[] data=new byte[(int) research.length()];
             is.read(data);
@@ -64,6 +68,7 @@ public class MainClass {
             response.writeBytes("\r\n\r\n");
             response.write(data);
         }else {
+            response.writeBytes("HTTP/1.0 404 not found\r\n");
             response.writeBytes("\r\n\r\n");
             response.writeBytes("Usage: file doesn't exist\r\n\r\n");
         }

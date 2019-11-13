@@ -1,0 +1,2 @@
+Il codice è stato testato con tutti i file all'interno della cartella.
+Il codice comprende i controlli in più sull'esistenza del file e sull'invio di richieste diverse dalla GET
