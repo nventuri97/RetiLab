@@ -6,12 +6,15 @@ public class MainClass {
     private static File research;
 
     public static void main(String[] args){
-        int port=9999;
+        int port= Integer.parseInt(args[0]);
         try{
+            //creo una socket passiva su cui il server sta in ascolto
             ServerSocket s_socket= new ServerSocket(port);
             while(true){
+                //accetto una richiesta di connessione
                 Socket active_socket= s_socket.accept();
                 BufferedReader reader= new BufferedReader(new InputStreamReader(active_socket.getInputStream()));
+                //leggo la richiesta del client inviata dal browser e controllo che sia una richiesta che posso soddisfare
                 boolean error=readRequest(reader);
 
                 DataOutputStream response=new DataOutputStream(active_socket.getOutputStream());
@@ -19,6 +22,7 @@ public class MainClass {
                 if(!error)
                     response.writeBytes("Usage: non-valid request\r\n");
 
+                //invio la risposta alla richiesta che è stata fatta
                 sendResponse(response);
                 active_socket.close();
             }
@@ -30,12 +34,13 @@ public class MainClass {
     private static boolean readRequest(BufferedReader reader) throws IOException{
         String sent=reader.readLine();
         String source="";
-        boolean guard=true;
+        //Controllo che la richiesta sia una GET altrimenti blocco il metodo e ritorno false
         if(sent.startsWith("GET")){
             source=sent;
         } else
             return false;
 
+        //suddivido la stringa in base agli spazi
         String[] subseq=source.split("\\s+");
         String filename=subseq[1].substring(1);
 
@@ -49,6 +54,7 @@ public class MainClass {
 
     private static void sendResponse(DataOutputStream response) throws IOException{
         InputStream is=null;
+        //se il file esiste costruisco la risposta, altrimenti restituisco un messaggio d'errore
         if(research.exists()) {
             is = new FileInputStream(research);
             byte[] data=new byte[(int) research.length()];
