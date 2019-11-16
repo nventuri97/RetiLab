@@ -31,7 +31,7 @@ public class EchoClient {
             client.write(buffer);
             System.out.println("Message sent to the server");
 
-            //Adesso devo passare in modalità lettura
+            //Adesso devo passare in modalità lettura aspettando la risposta del server
             buffer.flip();
             String answer="";
             while(true){
@@ -44,6 +44,8 @@ public class EchoClient {
                 if(len==0)
                     break;
             }
+
+            System.out.println("Message from the server: " + answer);
         }catch (IOException ioe){
             ioe.printStackTrace();
             return;
