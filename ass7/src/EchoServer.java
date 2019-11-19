@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class EchoServer {
     public static int DefaultPort=6798;
-    public static int MaxCapacity=1024;
+    public static int MaxCapacity=1;
 
     public static void main(String[] args){
         int port;
@@ -64,7 +64,8 @@ public class EchoServer {
                         System.out.println("Accepted connection from "+ client);
                         //Setto a non-blocking
                         client.configureBlocking(false);
-                        client.register(selector, SelectionKey.OP_READ);
+                        //Aggiungo la key del client
+                        SelectionKey key2=client.register(selector, SelectionKey.OP_READ);
                     } else if(key.isReadable()){
                         canBeRead(key);
                     } else if(key.isWritable())
@@ -82,10 +83,10 @@ public class EchoServer {
         ByteBuffer buff=ByteBuffer.allocate(MaxCapacity);
         String cl_msg="";
         int len=0;
-        while(true){
+        boolean cond=false;
+        while(!cond){
             len=client.read(buff);
-            if(len==0)
-                break;
+            cond = len==0;
             buff.flip();
             while (buff.hasRemaining())
                 cl_msg+= StandardCharsets.UTF_8.decode(buff).toString();
@@ -99,6 +100,7 @@ public class EchoServer {
         } else {
             System.out.println("Message received from client " + client);
             cl_msg+=" echod by server";
+            System.out.println(cl_msg);
             SelectionKey key2=key.interestOps(SelectionKey.OP_WRITE);
             ByteBuffer response=ByteBuffer.wrap(cl_msg.getBytes());
             key2.attach(response);
@@ -108,10 +110,9 @@ public class EchoServer {
 
     public static void canBeWrite(SelectionKey key) throws IOException{
         SocketChannel client= (SocketChannel) key.channel();
-        String response=(String) key.attachment();
-        ByteBuffer buff=ByteBuffer.wrap(response.getBytes());
+        ByteBuffer buff=(ByteBuffer) key.attachment();
         client.write(buff);
-        System.out.println("Response: "+ response);
+        System.out.println("Response sent to " + client);
         client.close();
     }
 }

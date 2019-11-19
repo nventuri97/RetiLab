@@ -3,6 +3,7 @@ import java.net.*;
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 public class EchoClient {
     public static int DefaultPort=6798;
@@ -24,7 +25,8 @@ public class EchoClient {
         try{
             //Apro la socket
             SocketChannel client=SocketChannel.open(new InetSocketAddress("localhost", port));
-            String sentece=args[1];
+            Scanner in=new Scanner(System.in);
+            String sentece=in.nextLine();
             //Preparo il buffer con la stringa che devo inviare
             ByteBuffer buffer=ByteBuffer.wrap(sentece.getBytes());
 
@@ -34,15 +36,15 @@ public class EchoClient {
             //Adesso devo passare in modalità lettura aspettando la risposta del server
             buffer.flip();
             String answer="";
-            while(true){
+            boolean cond = false;
+            while(!cond){
                 int len=client.read(buffer);
                 buffer.flip();
                 while (buffer.hasRemaining()) {
                     answer += StandardCharsets.UTF_8.decode(buffer).toString();
                 }
                 buffer.clear();
-                if(len==0)
-                    break;
+                cond = len==0 || len==-1;
             }
 
             System.out.println("Message from the server: " + answer);
