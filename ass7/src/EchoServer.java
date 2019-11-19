@@ -107,6 +107,11 @@ public class EchoServer {
     }
 
     public static void canBeWrite(SelectionKey key) throws IOException{
-        
+        SocketChannel client= (SocketChannel) key.channel();
+        String response=(String) key.attachment();
+        ByteBuffer buff=ByteBuffer.wrap(response.getBytes());
+        client.write(buff);
+        System.out.println("Response: "+ response);
+        client.close();
     }
 }
