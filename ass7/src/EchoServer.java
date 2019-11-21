@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class EchoServer {
     public static int DefaultPort=6798;
-    public static int MaxCapacity=1;
+    public static int MaxCapacity=1024;
 
     public static void main(String[] args){
         int port;
@@ -81,38 +81,42 @@ public class EchoServer {
     public static void canBeRead(SelectionKey key) throws IOException{
         SocketChannel client= (SocketChannel) key.channel();
         ByteBuffer buff=ByteBuffer.allocate(MaxCapacity);
-        String cl_msg="";
-        int len=0;
-        boolean cond=false;
-        while(!cond){
-            len=client.read(buff);
-            cond = len==0;
-            buff.flip();
-            while (buff.hasRemaining())
-                cl_msg+= StandardCharsets.UTF_8.decode(buff).toString();
-            buff.clear();
-        }
+        String cl_msg=(String) key.attachment();
+        if(cl_msg==null)
+            cl_msg="";
+        //leggo dall'active socket e salvo il contenuto del canale nel buffer
+        int len=client.read(buff);
 
-        if(len==-1){
-            System.out.println("Aborted connection by client");
-            client.close();
-            key.cancel();
-        } else {
-            System.out.println("Message received from client " + client);
-            cl_msg+=" echod by server";
-            System.out.println(cl_msg);
-            SelectionKey key2=key.interestOps(SelectionKey.OP_WRITE);
-            ByteBuffer response=ByteBuffer.wrap(cl_msg.getBytes());
-            key2.attach(response);
+        //Converto la modalità del buffer e compongo la stringa da restituire al client
+        buff.flip();
+        cl_msg+= StandardCharsets.UTF_8.decode(buff).toString();
+        System.out.println(cl_msg + "       "+ len);
+        buff.clear();
 
+        if(len==MaxCapacity){
+            key.attach(cl_msg);
+        }else {
+            if (len == -1) {
+                System.out.println("Aborted connection by client");
+                client.close();
+                key.cancel();
+            } else {
+                System.out.println("Message received from client " + client);
+                System.out.println(cl_msg);
+                SelectionKey key2 = key.interestOps(SelectionKey.OP_WRITE);
+                key2.attach(cl_msg);
+            }
         }
     }
 
     public static void canBeWrite(SelectionKey key) throws IOException{
         SocketChannel client= (SocketChannel) key.channel();
-        ByteBuffer buff=(ByteBuffer) key.attachment();
-        client.write(buff);
+        String cl_msg=(String) key.attachment();
+        cl_msg+=" echod by server";
+        ByteBuffer response=ByteBuffer.wrap(cl_msg.getBytes());
+        client.write(response);
         System.out.println("Response sent to " + client);
+        response.clear();
         client.close();
     }
 }
