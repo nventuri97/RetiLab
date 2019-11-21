@@ -47,7 +47,10 @@ public class EchoClient {
                 cond = len==0 || len==-1;
             }
 
-            System.out.println("Message from the server: " + answer);
+            if(answer!="")
+                System.out.println("Message from the server: " + answer);
+            else
+                System.out.println("Server shutted down with no response");
         }catch (IOException ioe){
             ioe.printStackTrace();
             return;

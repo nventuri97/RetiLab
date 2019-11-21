@@ -90,7 +90,6 @@ public class EchoServer {
         //Converto la modalità del buffer e compongo la stringa da restituire al client
         buff.flip();
         cl_msg+= StandardCharsets.UTF_8.decode(buff).toString();
-        System.out.println(cl_msg + "       "+ len);
         buff.clear();
 
         if(len==MaxCapacity){

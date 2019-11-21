@@ -1,0 +1,2 @@
+Il codice fa una lettura a blocchi, in quanto se il server avesse una lettura con doppio ciclo while, nel caso in cui ricevesse una stringa molto lunga da un client potrebbe rifiutare la connessione da parte di un altro client o farlo aspettare per un tempo, anche lungo, fino a che non ha finito la lettura.
+Non sono stati gestiti i casi in cui, client muoiano improvvisamente, con un segnale ad esempio, quindi non essendo chiuso il socket né da parte di client che da parte server, il server invierà un messaggio che non sarà letto da nessun
