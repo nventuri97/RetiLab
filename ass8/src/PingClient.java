@@ -28,6 +28,7 @@ public class PingClient {
                 //compongo il datagram packet da inviare sul socket
                 DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
                 //invio il datagram packet
+                packet.setData(data);
                 sock.send(packet);
                 trasmitted++;
 
@@ -42,15 +43,16 @@ public class PingClient {
                     System.out.println("*");
                     rtt[i]=0;
                     i++;
+                }finally {
+                    if(response!=null) {
+                        success++;
+                        String answer=new String(response, 0, response.length);
+                        long endtime=Calendar.getInstance().getTimeInMillis();
+                        rtt[i]=(int) (endtime-start_time);
+                        System.out.println(msg+" "+ rtt[i]);
+                    }
+                    i++;
                 }
-                if(response!=null) {
-                    success++;
-                    String answer=new String(response, 0, response.length);
-                    long endtime=Calendar.getInstance().getTimeInMillis();
-                    rtt[i]=(int) (endtime-start_time);
-                    System.out.println(msg+" "+ rtt[i]);
-                }
-                i++;
             }
         } catch (UnknownHostException une){
             System.out.println("ERR -arg 1");
@@ -66,12 +68,12 @@ public class PingClient {
         int p_loss=100-(trasmitted*100)/success;
         System.out.println(trasmitted+" packets trasmitted, "+success+" packets received, "+p_loss+"% loss");
         int tot=0;
-        int max=rtt[0], min=rtt[0];
+        int max=1, min=100000;
         for(int i=0;i<10;i++) {
             tot += rtt[i];
             if(rtt[i]>max)
                 max=rtt[i];
-            else if(rtt[i]<min)
+            else if(rtt[i]<min && rtt[i]!=0)
                 min=rtt[i];
         }
         float avg=tot/10;

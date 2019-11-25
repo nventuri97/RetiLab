@@ -37,6 +37,7 @@ public class PingServer {
                     System.out.println("Ping non inviato");
                 }else {
                     DatagramPacket response = new DatagramPacket(data, 1024, client, clport);
+                    response.setData(data);
                     serversock.send(response);
                     System.out.println(server_pack.getAddress() + " " + server_pack.getPort() + " " + new String(data, 0, data.length));
                     System.out.println("Ping ritardato di " + time + " ms");
