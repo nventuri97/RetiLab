@@ -70,6 +70,7 @@ public class PingClient {
 
     static void printStat(){
         int p_loss=100-(success*100/trasmitted);
+        System.out.println("--------STATISTICS--------");
         System.out.println(trasmitted+" packets trasmitted, "+success+" packets received, "+p_loss+"% loss");
         int tot=0;
         int max=1, min=100000;
