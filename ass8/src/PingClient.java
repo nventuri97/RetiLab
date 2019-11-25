@@ -35,18 +35,22 @@ public class PingClient {
                 //devo aspettare la risposta del server
                 byte[] response=new byte[1024];
                 DatagramPacket resp_packet=new DatagramPacket(response, 1024);
+                boolean lost=false;
                 try{
                 //setto il timeout del socket
                 sock.setSoTimeout(2000);
                 sock.receive(resp_packet);
                 }catch (SocketTimeoutException soe){
+                    //se ricevo la fine del timeout
                     System.out.println("*");
                     rtt[i]=0;
-                    i++;
+                    //setto lost a true così da non verificare le condizioni successive
+                    lost=true;
                 }finally {
-                    if(response!=null) {
+                    if(!lost) {
                         success++;
                         String answer=new String(response, 0, response.length);
+                        //prendo l'endtime e mi calcolo l'rtt come differenza tra tempo di arrivo e tempo di partenza
                         long endtime=Calendar.getInstance().getTimeInMillis();
                         rtt[i]=(int) (endtime-start_time);
                         System.out.println(msg+" "+ rtt[i]);
@@ -65,7 +69,7 @@ public class PingClient {
     }
 
     static void printStat(){
-        int p_loss=100-(trasmitted*100)/success;
+        int p_loss=100-(success*100/trasmitted);
         System.out.println(trasmitted+" packets trasmitted, "+success+" packets received, "+p_loss+"% loss");
         int tot=0;
         int max=1, min=100000;
