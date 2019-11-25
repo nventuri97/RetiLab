@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -30,10 +31,16 @@ public class PingServer {
 
                 InetAddress client = server_pack.getAddress();
                 int clport=server_pack.getPort();
-                DatagramPacket response=new DatagramPacket(data, 1024, client, clport);
-                serversock.send(response);
-                System.out.println(server_pack.getAddress()+ " "+server_pack.getPort()+" "+new String(data, 0, data.length));
-                System.out.println("Ping ritardato di "+ time+" ms");
+                int casual=(int)(Math.random()*3)+1;
+                if(casual==1) {
+                    System.out.println(server_pack.getAddress() + " " + server_pack.getPort() + " " + new String(data, 0, data.length));
+                    System.out.println("Ping non inviato");
+                }else {
+                    DatagramPacket response = new DatagramPacket(data, 1024, client, clport);
+                    serversock.send(response);
+                    System.out.println(server_pack.getAddress() + " " + server_pack.getPort() + " " + new String(data, 0, data.length));
+                    System.out.println("Ping ritardato di " + time + " ms");
+                }
             }
         } catch(SocketException soe){
             System.out.println("ERR -arg 1");
