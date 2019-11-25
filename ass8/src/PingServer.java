@@ -18,12 +18,11 @@ public class PingServer {
             DatagramSocket serversock = new DatagramSocket(port);
             while(true) {
                 //costruisco il buffer e il datagram per ricevere il messaggio dal client
-                byte[] data = new byte[30];
-                DatagramPacket server_pack = new DatagramPacket(data, 30);
+                byte[] data = new byte[1024];
+                DatagramPacket server_pack = new DatagramPacket(data, 1024);
                 //ricevo il datagram dal client
                 serversock.receive(server_pack);
                 //trasformo il messaggio in stringa e lo stampo
-                System.out.println(new String(data, 0, data.length));
 
                 //genero un tempo casuale in cui faccio sleep e poi invio la risposta
                 long time=(long) (Math.random()*100);
@@ -31,7 +30,10 @@ public class PingServer {
 
                 InetAddress client = server_pack.getAddress();
                 int clport=server_pack.getPort();
-                DatagramPacket response=new DatagramPacket(data, 30, client, clport);
+                DatagramPacket response=new DatagramPacket(data, 1024, client, clport);
+                serversock.send(response);
+                System.out.println(server_pack.getAddress()+ " "+server_pack.getPort()+" "+new String(data, 0, data.length));
+                System.out.println("Ping ritardato di "+ time+" ms");
             }
         } catch(SocketException soe){
             System.out.println("ERR -arg 1");
