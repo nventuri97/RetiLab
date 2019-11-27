@@ -53,7 +53,7 @@ public class PingClient {
                         //prendo l'endtime e mi calcolo l'rtt come differenza tra tempo di arrivo e tempo di partenza
                         long endtime=Calendar.getInstance().getTimeInMillis();
                         rtt[i]=(int) (endtime-start_time);
-                        System.out.println(msg+" "+ rtt[i]);
+                        System.out.println(msg+" RTT:"+ rtt[i]);
                     }
                     i++;
                 }
@@ -76,12 +76,11 @@ public class PingClient {
         int max=1, min=100000;
         for(int i=0;i<10;i++) {
             tot += rtt[i];
-            if(rtt[i]>max)
-                max=rtt[i];
-            else if(rtt[i]<min && rtt[i]!=0)
-                min=rtt[i];
+            if(rtt[i]!=0)
+                min=Math.min(min, rtt[i]);
+            max=Math.max(max, rtt[i]);
         }
-        float avg=tot/10;
+        float avg=(float)tot/success;
         System.out.println( "round-trip (ms) min/avg/max = "+min+"/"+avg+"/"+max);
     }
 }
