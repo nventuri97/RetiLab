@@ -4,6 +4,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.Random;
 
 public class PingServer {
 
@@ -13,8 +14,23 @@ public class PingServer {
             return;
         }
 
+        int port;
+        Random r=new Random();
+
+        try{
+            port = Integer.parseInt(args[0]);
+        }catch (RuntimeException re){
+            System.out.println("ERR -arg 1");
+            return;
+        }
+
+        try{
+            r.setSeed(Long.parseLong(args[1]));
+        }catch (RuntimeException re){
+            r.setSeed(0);
+        }
+
         try {
-            int port = Integer.parseInt(args[0]);
             //creo la DatagramSocket su cui mi metto in ascolto
             DatagramSocket serversock = new DatagramSocket(port);
             while(true) {
@@ -44,8 +60,7 @@ public class PingServer {
                 }
             }
         } catch(SocketException soe){
-            System.out.println("ERR -arg 1");
-            return;
+            soe.printStackTrace();
         } catch(IOException ioe){
             ioe.printStackTrace();
         } catch (InterruptedException e){
