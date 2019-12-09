@@ -7,11 +7,11 @@ public interface CongressInterface extends Remote {
     //Restituisce True se la registrazione andata a buon fine, false altrimenti
     public boolean registration(String speakerName, int day, int numberSection) throws RemoteException;
 
-    //Restituisce l'organizzazione del giorno day della conferenza
-    public String getConferanceOrganization(int day) throws RemoteException;
-
     //Restituisce l'organizzazione di tutta la conferenza
-    public String getConferanceOrganization() throws RemoteException;
+    public ArrayList<ArrayList<String>> getConferenceOrganization() throws RemoteException;
+
+    //Restituisce l'organizzazione del giorno day della conferenza
+    public ArrayList<String> getConferenceOrganization(int day) throws RemoteException;
 
     //Restituisce le operazioni possibili
     public ArrayList<String> getOperations() throws RemoteException;
