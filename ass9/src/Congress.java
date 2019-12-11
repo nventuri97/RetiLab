@@ -21,6 +21,7 @@ public class Congress extends RemoteServer implements CongressInterface{
         operations.add("Visulizza il programma completo del congresso");
         operations.add("Visulizza il programma di un giorno specifico");
         operations.add("Visulizza il programma di una specifica sessione per l'intero congresso");
+        operations.add("Terminare il programma");
     }
 
     @Override
