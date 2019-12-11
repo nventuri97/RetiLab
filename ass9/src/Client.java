@@ -12,7 +12,7 @@ public class Client {
             return;
         }
 
-        int port;
+        int port=1111;
 
         try{
             port=Integer.parseInt(args[0]);
@@ -21,7 +21,7 @@ public class Client {
             rue.printStackTrace();
         }
 
-        Congress s_obj;
+        CongressInterface s_obj;
         Remote r_obj;
 
         boolean run=true;
@@ -29,18 +29,19 @@ public class Client {
         try{
             Registry reg= LocateRegistry.getRegistry(port);
             r_obj=reg.lookup("Congress-Server");
-            s_obj=(Congress) r_obj;
+            s_obj=(CongressInterface) r_obj;
 
             //Creo lo scanner per l'input da tastiera
             Scanner in=new Scanner(System.in);
+
+            System.out.println("Benventuti nel sistema del congresso\nOperazioni consentite: "+ s_obj.getOperations());
             while(run){
-                System.out.println("Operazioni consentite: "+ s_obj.getOperations());
                 System.out.print("Quale operaione effettuare? ");
                 int op=Integer.parseInt(in.nextLine());
 
                 switch (op){
                     case 1:
-                        insertNewSpeaker();
+                        insertNewSpeaker(s_obj);
                         break;
                     case 2:
                         System.out.println("Agenda completa del congresso\n"+s_obj.getConferenceOrganization());
@@ -67,6 +68,16 @@ public class Client {
         } catch (Exception re){
             re.printStackTrace();
         }
+    }
 
+    public static void insertNewSpeaker(CongressInterface obj) throws RemoteException{
+        Scanner in=new Scanner(System.in);
+        System.out.print("Inseririre il nome dello speaker: ");
+        String name=in.nextLine();
+        System.out.print("Inserire il giorno in cui aggiungere lo speaker: ");
+        int day=Integer.parseInt(in.nextLine());
+        System.out.print("Inserire in quale sezione si vuole inserire lo speaker: ");
+        int section=Integer.parseInt(in.nextLine());
+        obj.registration(name, day, section);
     }
 }

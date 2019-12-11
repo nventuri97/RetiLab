@@ -9,7 +9,9 @@ public class Congress extends RemoteServer implements CongressInterface{
     private ArrayList<String> operations;
 
     public Congress() throws RemoteException{
-        this.organizationD1=this.organizationD2=this.organizationD3=new ArrayList<>(section);
+        this.organizationD1=new ArrayList<>(section);
+        this.organizationD2=new ArrayList<>(section);
+        this.organizationD3=new ArrayList<>(section);
         for(int i=0;i<section;i++){
             organizationD1.add(new ArrayList<String>(5));
             organizationD2.add(new ArrayList<String>(5));
