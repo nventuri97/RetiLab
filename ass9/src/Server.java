@@ -8,7 +8,7 @@ public class Server {
     public static void main(String args[]){
         if(args.length==0){
             System.out.println("Usage: Server port requested");
-            return;
+            System.exit(1);
         }
         //porta per collegarsi al server
         int port;

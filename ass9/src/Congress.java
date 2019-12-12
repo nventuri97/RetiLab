@@ -4,18 +4,18 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class Congress extends RemoteServer implements CongressInterface{
-    private static int days=3, section=12;
+    private static int days=3, session=12;
     private ArrayList<ArrayList<String>> organizationD1, organizationD2, organizationD3;
     private ArrayList<String> operations;
 
     public Congress() throws RemoteException{
-        this.organizationD1=new ArrayList<>(section);
-        this.organizationD2=new ArrayList<>(section);
-        this.organizationD3=new ArrayList<>(section);
-        for(int i=0;i<section;i++){
-            organizationD1.add(new ArrayList<String>(5));
-            organizationD2.add(new ArrayList<String>(5));
-            organizationD3.add(new ArrayList<String>(5));
+        this.organizationD1=new ArrayList<>(session);
+        this.organizationD2=new ArrayList<>(session);
+        this.organizationD3=new ArrayList<>(session);
+        for(int i=0;i<session;i++){
+            organizationD1.add(new ArrayList<String>());
+            organizationD2.add(new ArrayList<String>());
+            organizationD3.add(new ArrayList<String>());
         }
 
         this.operations=new ArrayList<>();
@@ -27,25 +27,25 @@ public class Congress extends RemoteServer implements CongressInterface{
     }
 
     @Override
-    public boolean registration(String speakerName, int day, int numberSection) throws RemoteException {
-        if(numberSection>12)
+    public synchronized boolean registration(String speakerName, int day, int numberSession) throws RemoteException {
+        if(numberSession>12)
             throw new RemoteException("Numero di sessione giornaliera inesistente");
 
         switch (day){
             case(1):
-                if(organizationD1.get(numberSection-1).size()==5)
+                if(organizationD1.get(numberSession-1).size()==5)
                     throw new RemoteException("Sessione completa, impossibile aggiungere nuovo speaker");
-                organizationD1.get(numberSection-1).add(speakerName);
+                organizationD1.get(numberSession-1).add(speakerName);
                 return true;
             case(2):
-                if(organizationD2.get(numberSection-1).size()==5)
+                if(organizationD2.get(numberSession-1).size()==5)
                     throw new RemoteException("Sessione completa, impossibile aggiungere nuovo speaker");
-                organizationD2.get(numberSection-1).add(speakerName);
+                organizationD2.get(numberSession-1).add(speakerName);
                 return true;
             case(3):
-                if(organizationD3.get(numberSection-1).size()==5)
+                if(organizationD3.get(numberSession-1).size()==5)
                     throw new RemoteException("Sessione completa, impossibile aggiungere nuovo speaker");
-                organizationD3.get(numberSection-1).add(speakerName);
+                organizationD3.get(numberSession-1).add(speakerName);
                 return true;
             default:
                 throw new RemoteException("Giorno congresso errato");
@@ -83,14 +83,14 @@ public class Congress extends RemoteServer implements CongressInterface{
     }
 
     @Override
-    public ArrayList<ArrayList<String>> getSection(int i) throws RemoteException {
-        if(i>section)
+    public ArrayList<ArrayList<String>> getSession(int i) throws RemoteException {
+        if(i>session)
             throw new RemoteException("Numero di sessione giornaliera inesistente");
-        ArrayList<ArrayList<String>> specificSection=new ArrayList<>();
-        specificSection.add(organizationD1.get(i-1));
-        specificSection.add(organizationD2.get(i-1));
-        specificSection.add(organizationD3.get(i-1));
+        ArrayList<ArrayList<String>> specificSession=new ArrayList<>();
+        specificSession.add(organizationD1.get(i-1));
+        specificSession.add(organizationD2.get(i-1));
+        specificSession.add(organizationD3.get(i-1));
 
-        return specificSection;
+        return specificSession;
     }
 }

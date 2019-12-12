@@ -17,5 +17,5 @@ public interface CongressInterface extends Remote {
     public ArrayList<String> getOperations() throws RemoteException;
 
     //Restistuisce l'i-esima sessione di tutti giorni
-    public ArrayList<ArrayList<String>> getSection(int i) throws RemoteException;
+    public ArrayList<ArrayList<String>> getSession(int i) throws RemoteException;
 }
