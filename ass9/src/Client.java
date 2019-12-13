@@ -36,7 +36,8 @@ public class Client {
             //Creo lo scanner per l'input da tastiera
             Scanner in=new Scanner(System.in);
 
-            System.out.println("Benventuti nel sistema del congresso\nOperazioni consentite: "+ s_obj.getOperations());
+            System.out.println("Benventuti nel sistema del congresso\nOperazioni consentite: ");
+            printOperation(s_obj);
             while(run){
                 System.out.print("Quale operazione effettuare? ");
                 int op=Integer.parseInt(in.nextLine());
@@ -53,12 +54,14 @@ public class Client {
                     case 3:
                         System.out.print("Inserire il giorno di cui si desidera visualizzare l'agenda: ");
                         int day=Integer.parseInt(in.nextLine());
-                        System.out.println("Agenda del giorno "+day+"\n"+s_obj.getConferenceOrganization(day));
+                        System.out.println("----------Giorno "+day+"-----------");
+                        printOrgDay(s_obj.getConferenceOrganization(day));
                         break;
                     case 4:
                         System.out.print("Inserire il numero di sessione d'interesse: ");
                         int session=Integer.parseInt(in.nextLine());
-                        System.out.println("Agenda della sessione "+session+" per i giorni del congresso\n"+s_obj.getSession(session));
+                        System.out.println("Agenda della sessione "+session+" per i giorni del congresso");
+                        printSession(s_obj.getSession(session), session);
                         break;
                     case 5:
                         System.out.println("Sistema in fase di terminazione, arrivederci");
@@ -86,17 +89,51 @@ public class Client {
     }
 
     public static void printOrganization(ArrayList<ArrayList<ArrayList<String>>> org){
-        for(int i=0;i<3;i++){
-            System.out.println("Giorno "+(i+1));
-            for(int y=0;y<12;y++){
-                System.out.print("S"+(y+1)+"\t");
-                List<String> l = org.get(i).get(y);
-                for(int k=0;k<l.size();k++){
-                    System.out.print(l.get(k)+",") ;
-                    if(k==l.size()-1)
-                        System.out.print("\n");
+        int len1=org.size();
+        for(int i=0;i<len1;i++){
+            ArrayList<ArrayList<String>> app1=org.get(i);
+            int len2=app1.size();
+            System.out.println("-----------Giorno "+(i+1)+"-----------");
+            for(int y=0;y<len2;y++) {
+                System.out.print("S" + (y + 1) + "\t");
+                ArrayList<String> app2 = app1.get(y);
+                int len3 = app2.size();
+                for (int k = 0; k < len3; k++) {
+                    System.out.print(app2.get(k) + "\t");
                 }
+                System.out.print("\n");
             }
+        }
+    }
+
+    public static void printOperation(CongressInterface obj) throws RemoteException{
+        ArrayList<String> op=obj.getOperations();
+        int i=1;
+        for(String s: op){
+            System.out.println(i+". "+s);
+            i++;
+        }
+    }
+
+    public static void printOrgDay(ArrayList<ArrayList<String>> org){
+        int len=org.size();
+        for(int i=0;i<len;i++){
+            System.out.print("S"+(i+1)+"\t");
+            for(String s:org.get(i))
+                System.out.print(s+"\t");
+            System.out.print("\n");
+        }
+    }
+
+    public static void printSession(ArrayList<ArrayList<String>> session, int n){
+        int len=session.size();
+        int i=1;
+        for(ArrayList<String> obj: session){
+            System.out.println("-----------Giorno "+i+"----------");
+            System.out.print("S"+n+"\t");
+            for(String s: obj)
+                System.out.print(s+"\t");
+            System.out.print("\n");
         }
     }
 }
