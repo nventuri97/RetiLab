@@ -19,20 +19,19 @@ public class TimeClient {
             //Creo la socket e mi aggiungo al multicast
             MulticastSocket clients=new MulticastSocket(port);
             clients.joinGroup(group);
-            clients.setReuseAddress(true);
 
-            int i=0;
-            while(i<10) {
+            for(int i=0;i<10;i++){
                 byte[] data = new byte[1024];
-                DatagramPacket packet = new DatagramPacket(data, data.length, group, port);
+                DatagramPacket packet = new DatagramPacket(data, data.length);
                 clients.receive(packet);
-                if(data.toString()==""){
+                if((new String(packet.getData()))==""){
                     System.out.println("Server crashed");
                     break;
                 }
-                System.out.println(data.toString());
-                i++;
+                System.out.println(new String(packet.getData()));
             }
+            clients.leaveGroup(group);
+            clients.close();
         }catch(IOException ioe){
             ioe.printStackTrace();
         }

@@ -4,7 +4,7 @@ import java.net.*;
 import java.util.Calendar;
 
 public class TimeServer {
-    private static long interval=(long) (Math.random()*100)+1;
+    private static long interval=(long) (Math.random()*1000)+1;
 
     public static void main(String args[]){
         if(args.length!=2){
@@ -17,13 +17,15 @@ public class TimeServer {
             InetAddress ias=InetAddress.getByName(args[1]);
             //Creo la socket su cui si attaccherà il gruppo
             int port=Integer.parseInt(args[0]);
-            DatagramSocket serversock=new DatagramSocket(port);
+            DatagramSocket serversock=new DatagramSocket();
             serversock.setReuseAddress(true);
             System.out.println("TimeServer working");
 
             while(true){
-                byte[ ] data= Calendar.getInstance().toString().getBytes();
+                String s=""+Calendar.getInstance().getTime();
+                byte[ ] data=s.getBytes();
                 DatagramPacket packet=new DatagramPacket(data, data.length, ias, port);
+                System.out.println(new String(packet.getData()));
                 serversock.send(packet);
                 Thread.sleep(interval);
             }
