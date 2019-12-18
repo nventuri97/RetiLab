@@ -19,20 +19,23 @@ public class TimeClient {
             //Creo la socket e mi aggiungo al multicast
             MulticastSocket clients=new MulticastSocket(port);
             clients.joinGroup(group);
+            clients.setReuseAddress(true);
 
+            byte[] data = new byte[1024];
+            DatagramPacket packet;
             for(int i=0;i<10;i++){
-                byte[] data = new byte[1024];
-                DatagramPacket packet = new DatagramPacket(data, data.length);
+                packet = new DatagramPacket(data, data.length);
+                System.out.println("Pacchetto "+(i+1));
+                //Se non ricevo niente per 30 secondi significa che il server è crashato e scatta il timeout
+                clients.setSoTimeout(30000);
                 clients.receive(packet);
-                if((new String(packet.getData()))==""){
-                    System.out.println("Server crashed");
-                    break;
-                }
                 System.out.println(new String(packet.getData()));
             }
             clients.leaveGroup(group);
             clients.close();
-        }catch(IOException ioe){
+        } catch(SocketTimeoutException soe){
+            System.out.println("Server crashed");
+        } catch(IOException ioe){
             ioe.printStackTrace();
         }
     }

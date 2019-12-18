@@ -2,6 +2,7 @@ import java.io.*;
 import java.io.IOException;
 import java.net.*;
 import java.util.Calendar;
+import java.util.Date;
 
 public class TimeServer {
     private static long interval=(long) (Math.random()*1000)+1;
@@ -21,18 +22,19 @@ public class TimeServer {
             serversock.setReuseAddress(true);
             System.out.println("TimeServer working");
 
+            byte[ ] buff;
+            Date data;
+
             while(true){
-                String s=""+Calendar.getInstance().getTime();
-                byte[ ] data=s.getBytes();
-                DatagramPacket packet=new DatagramPacket(data, data.length, ias, port);
+                data=new Date();
+                buff=data.toString().getBytes();
+                DatagramPacket packet=new DatagramPacket(buff, buff.length, ias, port);
                 System.out.println(new String(packet.getData()));
                 serversock.send(packet);
                 Thread.sleep(interval);
             }
-        } catch (IOException ioe){
+        } catch (IOException | InterruptedException ioe){
             ioe.printStackTrace();
-        } catch (InterruptedException ie){
-            ie.printStackTrace();
         }
     }
 }
